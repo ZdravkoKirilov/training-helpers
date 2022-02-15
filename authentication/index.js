@@ -2,17 +2,19 @@ const express = require("express");
 const validator = require("validator");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
+const cors = require('cors')
 
 var jsonParser = bodyParser.json();
 
 const app = express();
 
 app.use(jsonParser);
+app.use(cors())
 
 const users = [];
 
 app.get("/", (req, res) => {
-  return res.send("This is the authentication API");
+  return res.send(users);
 });
 
 app.get("/users/me", (req, res) => {

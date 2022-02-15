@@ -1,0 +1,30 @@
+# Todo API
+
+## Has 4 endpoints
+
+1. GET /todos => returns all todos
+
+2. POST /todos => creates a new Todo. Expects the following data:
+
+```js
+{
+    title: [String ] [Required] [5-100 characters] [Unique],
+    description: [String] [Optional] [10-300 characters]
+}
+```
+
+3. PUT /todos => edits an existing Todo. The payload must contain "id" field. Can update one or all of the following fields:
+
+```js
+{
+    title: [String ] [5-100 characters] [Unique],
+    description: [String] [10-300 characters],
+    completed: [Boolean],
+}
+```
+
+4. DELETE /todos/:todoId - deletes a Todo. The "todoId" param is required.
+
+## Delay and errors
+
+Each endpoint has random delay and error chance applied. For modifications check out helpers.js
