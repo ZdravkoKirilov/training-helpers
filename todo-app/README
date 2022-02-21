@@ -1,5 +1,15 @@
 # Todo API
 
+## How to run
+
+- It's reccommended to use nodejs v16 at least, since that was used to create the project
+- Open a terminal in the "todo-app" folder and run ```npm i```
+- Once ready, run ```npm start```
+- If everything wen't fine, you'll see a console message that the app is running
+- The app doesn't use a real database and keeps everything in memory. If you wish
+to clean the data - simply restart the server.
+
+
 ## Has 4 endpoints
 
 1. GET /todos => returns all todos
