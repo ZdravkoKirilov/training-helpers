@@ -1,5 +1,6 @@
 const { z } = require("zod");
 const { v4: uuid } = require("uuid");
+const { isNumber } = require("lodash");
 
 const products = require("./products");
 
@@ -12,15 +13,13 @@ const ErrorTypes = {
 const parser = z.object({
   id: z.string().uuid(),
   orderDate: z.date(),
-  products: z.array(
-    z
-      .string()
-      .min(1)
-      .uuid()
-      .refine((productId) => {
+  products: z
+    .array(
+      z.number().refine((productId) => {
         return !!products.find((elem) => elem.id === productId);
       }, ErrorTypes.ProductNotFound)
-  ),
+    )
+    .min(1),
   total: z.number(),
   currency: z.literal("BGN"),
 });
@@ -39,17 +38,31 @@ class OrderError extends Error {
 const OrderModel = {
   create: (source) => {
     source = source || {};
+    const orderProducts = source.products || [];
+
+    const total = orderProducts.reduce((acc, productId) => {
+      const item = products.find((elem) => elem.id === productId);
+
+      if (item && isNumber(item.price)) {
+        acc += item.price;
+      }
+
+      return acc;
+    }, 0);
+
     const parsed = parser.safeParse({
-      ...source,
       orderDate: new Date(),
       currency: "BGN",
       id: uuid(),
+      total,
+      products: orderProducts,
     });
 
     if (parsed.success) {
       orders.push(parsed.data);
       return parsed.data;
     }
+
     return new OrderError(
       ErrorTypes.ParsingError,
       parsed.error.flatten().fieldErrors

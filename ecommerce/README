@@ -1,0 +1,94 @@
+# Todo API
+
+## How to run
+
+- It's reccommended to use nodejs v16 at least, since that was used to create the project
+- Open a terminal in the "ecommerce" folder and run `npm i`
+- Once ready, run `npm start`
+- If everything wen't fine, you'll see a console message that the app is running
+- The app doesn't use a real database and keeps everything in memory. If you wish
+  to clean the data - simply restart the server.
+
+## Has the following endpoints
+
+1. GET /api/products => returns products. Works with all or only some of the following query params:
+
+```js
+{
+      page: Integer,
+      category: "food" | "drink",
+      minPrice: Number,
+      maxPrice: Number | Infinity,
+      order: "asc" | "desc",
+}
+```
+
+So an example request could look like:
+
+```js
+GET localhost:8080/api/products?page=1&category=drink&minPrice=5&maxPrice=10&order=asc
+```
+
+Response shape:
+
+```js
+{
+  total: Integer;
+  pageSize: Integer;
+  page: Integer;
+  data: Product[]
+}
+```
+
+2. POST /api/orders => creates a new Order. Expects the following data:
+
+```js
+{
+    products: [someProductId, someOtherProductId],
+}
+```
+
+3. GET /api/orders - returns all orders
+
+```js
+[
+  {
+    id: string,
+    orderDate: dateAsString,
+    products: [productId, otherProductId],
+    total: Number,
+    currency: string,
+  },
+  ...etc,
+];
+```
+
+4. GET api/orders/:orderId, e.g. - http://localhost:8080/api/orders/ae3e9c97-ff32-41b1-88b6-50d678093d8c
+
+Returns the following:
+
+```js
+{
+    "id": "ae3e9c97-ff32-41b1-88b6-50d678093d8c",
+    "orderDate": "2022-03-29T08:47:28.615Z",
+    "products": [
+        {
+            "id": 1,
+            "type": "food",
+            "name": "Tomato",
+            "image": "http://localhost:8080/images/tomato.jpg",
+            "price": 3,
+            "currency": "BGN",
+            "amount": 1,
+            "unit": "KG"
+        },
+        ... etc
+    ],
+    "total": 13,
+    "currency": "BGN"
+}
+```
+
+## Delay and errors
+
+Each endpoint has random delay and error chance applied. For modifications check out helpers.js

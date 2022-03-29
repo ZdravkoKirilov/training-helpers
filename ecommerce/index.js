@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { orderBy } = require('lodash');
+const { orderBy } = require("lodash");
 
 const { randomDelayMiddleware, randomFailureMiddleware } = require("./helpers");
 const products = require("./products");
@@ -29,6 +29,7 @@ app.get(
   (req, res) => {
     const pageSize = 5;
     let results = [...products];
+    let totalCount = results.length;
 
     const {
       page = 1,
@@ -40,6 +41,7 @@ app.get(
 
     if (category !== "all") {
       results = results.filter((product) => product.type === category);
+      totalCount = results.length;
     }
 
     results = results.filter(
@@ -49,6 +51,8 @@ app.get(
 
     results = orderBy(results, ["price"], [order]);
 
+    totalCount = results.length;
+
     if (page) {
       const startAt = (Number(page) - 1) * pageSize;
       const endAt = startAt + pageSize;
@@ -56,7 +60,12 @@ app.get(
       results = results.slice(startAt, endAt);
     }
 
-    return res.send(results);
+    return res.send({
+      total: totalCount,
+      pageSize,
+      page,
+      data: results,
+    });
   }
 );
 
