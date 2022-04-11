@@ -1,11 +1,11 @@
-# Todo API
+# ECommerce API
 
 ## How to run
 
 - It's reccommended to use nodejs v16 at least, since that was used to create the project
 - Open a terminal in the "ecommerce" folder and run `npm i`
 - Once ready, run `npm start`
-- If everything wen't fine, you'll see a console message that the app is running
+- If everything went fine, you'll see a console message that the app is running
 - The app doesn't use a real database and keeps everything in memory. If you wish
   to clean the data - simply restart the server.
 
