@@ -1,33 +1,53 @@
 import { pipe } from "lodash/fp";
 
-export type CreateQuestionDto = {
+export type CreateAnswerDto = {
   title: string;
   points: number;
 };
 
-export type UpdateQuestionDto = CreateQuestionDto & {
-  id: string;
+export type Answer = CreateAnswerDto & {
+  id: number;
 };
 
-export type Question = UpdateQuestionDto & {
+export type CreateQuestionDto = {
+  title: string;
+  hint?: string;
+};
+
+export type UpdateQuestionDto = CreateQuestionDto & {
+  id: number;
+  answers: Array<CreateAnswerDto | Answer>;
+};
+
+export type Question = Omit<UpdateQuestionDto, "answers"> & {
+  answers: Answer[];
+
   createdAt: Date;
   updatedAt?: Date;
 };
 
 let questions = [] as Question[];
-const currentId = 0;
+let currentQuestionId = 0;
+let currentAnswerId = 0;
 
 const getQuestions = () => {
   return questions;
 };
 
+const saveQuestions = (newQuestions: Question[]) => {
+  questions = newQuestions;
+
+  return newQuestions;
+};
+
 const addQuestion = (dto: CreateQuestionDto): Question => {
-  currentId + 1;
+  currentQuestionId += 1;
 
   const newQuestion = {
     ...dto,
-    id: String(currentId),
+    id: currentQuestionId,
     createdAt: new Date(),
+    answers: [],
   };
 
   questions.push(newQuestion);
@@ -45,6 +65,19 @@ const editQuestion = (dto: UpdateQuestionDto): Question => {
   const updatedQuestion = {
     ...existingQuestion,
     ...dto,
+    updatedAt: new Date(),
+    answers: dto.answers.map((answer) => {
+      currentAnswerId += 1;
+
+      if (!("id" in answer)) {
+        return {
+          ...answer,
+          id: currentAnswerId,
+        };
+      }
+
+      return answer;
+    }),
   };
 
   questions = questions.map((question) =>
@@ -103,4 +136,5 @@ export const api = {
   getQuestions: withDelayAndFailures(getQuestions),
   editQuestion: withDelayAndFailures(editQuestion),
   deleteQuestion: withDelayAndFailures(deleteQuestion),
+  saveQuestions: withDelayAndFailures(saveQuestions),
 };

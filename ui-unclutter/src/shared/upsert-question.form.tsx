@@ -12,7 +12,12 @@ type Props = {
   question?: Question;
 };
 
-const UpsertForm: FC<Props> = ({ isLoading, error, question, onSubmit }) => {
+export const UpsertQuestionForm: FC<Props> = ({
+  isLoading,
+  error,
+  question,
+  onSubmit,
+}) => {
   const {
     register,
     handleSubmit,
@@ -41,15 +46,15 @@ const UpsertForm: FC<Props> = ({ isLoading, error, question, onSubmit }) => {
 
       <TextField
         fullWidth
-        aria-required
-        id="points"
-        name="points"
-        label="Points"
-        type="number"
-        inputProps={{ ...register("points", { required: true }) }}
-        helperText={errors.points?.message || ""}
-        error={!!errors.points?.message}
-        aria-invalid={!!errors.points?.message}
+        id="hint"
+        name="hint"
+        multiline
+        minRows={2}
+        label="Hint"
+        inputProps={{ ...register("hint") }}
+        helperText={errors.hint?.message || ""}
+        error={!!errors.hint?.message}
+        aria-invalid={!!errors.hint?.message}
       />
 
       <LoadingButton loading={isLoading} variant="contained" type="submit">
@@ -60,5 +65,3 @@ const UpsertForm: FC<Props> = ({ isLoading, error, question, onSubmit }) => {
     </Stack>
   );
 };
-
-export default UpsertForm;
