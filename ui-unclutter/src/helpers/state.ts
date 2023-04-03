@@ -15,7 +15,10 @@ export const useQuestions = () => {
 
   const addQuestion = useMutation(api.addQuestion, {
     onSuccess: (response) => {
-      client.setQueryData(cacheKey, [...existingQuestions, response]);
+      client.setQueryData(cacheKey, [
+        ...existingQuestions.filter((elem) => elem.id !== response.id),
+        response,
+      ]);
     },
   });
 
