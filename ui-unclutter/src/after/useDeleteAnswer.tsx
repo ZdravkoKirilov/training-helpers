@@ -65,7 +65,7 @@ export const useDeleteAnswer = () => {
 
         <DialogContent>
           <Stack p={2} gap={2}>
-            <Box>
+            <Stack direction="row" justifyContent="flex-end">
               <LoadingButton
                 color="warning"
                 variant="contained"
@@ -74,7 +74,7 @@ export const useDeleteAnswer = () => {
               >
                 Yes
               </LoadingButton>
-            </Box>
+            </Stack>
 
             {editQuestion.isError && (
               <Alert severity="error">Something went wrong.</Alert>

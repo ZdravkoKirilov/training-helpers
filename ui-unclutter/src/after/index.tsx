@@ -93,6 +93,7 @@ const RefinedQuizForm: FC = () => {
 
             {query.data.map((question, questionIndex) => (
               <QuestionCard
+                key={question.id}
                 question={question}
                 isUpdating={
                   editQuestion.isLoading &&

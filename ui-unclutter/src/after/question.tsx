@@ -58,6 +58,7 @@ const QuestionCard: FC<Props> = ({
           direction="row"
           gap={5}
           justifyContent="space-between"
+          flexWrap="wrap"
         >
           <Stack gap={1}>
             <Typography fontWeight="bold">
@@ -105,28 +106,34 @@ const QuestionCard: FC<Props> = ({
             {!isFirst && (
               <Box>
                 <Tooltip title="Move question up">
-                  <IconButton
-                    aria-label="Move question up"
-                    onClick={() => onMoveQuestion("up")}
-                    disabled={isUpdatingQuestions}
-                  >
-                    <ArrowUpward />
-                  </IconButton>
+                  <span>
+                    <IconButton
+                      aria-label="Move question up"
+                      onClick={() => onMoveQuestion("up")}
+                      disabled={isUpdatingQuestions}
+                    >
+                      <ArrowUpward />
+                    </IconButton>
+                  </span>
                 </Tooltip>
               </Box>
             )}
 
             {!isLast && (
               <Box>
-                <Tooltip title="Move question down">
-                  <IconButton
-                    aria-label="Move question down"
-                    onClick={() => onMoveQuestion("down")}
-                    disabled={isUpdatingQuestions}
-                  >
-                    <ArrowDownward />
-                  </IconButton>
-                </Tooltip>
+                <span>
+                  <Tooltip title="Move question down">
+                    <span>
+                      <IconButton
+                        aria-label="Move question down"
+                        onClick={() => onMoveQuestion("down")}
+                        disabled={isUpdatingQuestions}
+                      >
+                        <ArrowDownward />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                </span>
               </Box>
             )}
           </Stack>
@@ -141,7 +148,13 @@ const QuestionCard: FC<Props> = ({
 
           {question.answers.map((answer, answerIndex) => (
             <Card key={answer.id}>
-              <Stack p={1} gap={1} direction="row" alignItems="center">
+              <Stack
+                p={1}
+                gap={1}
+                direction="row"
+                alignItems="center"
+                flexWrap="wrap"
+              >
                 <Typography>{answer.title}</Typography>
 
                 <Box flexGrow={1} />

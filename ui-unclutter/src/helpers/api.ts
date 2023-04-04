@@ -1,4 +1,4 @@
-import { pipe } from "lodash/fp";
+import { pipe, sample } from "lodash/fp";
 
 export type CreateAnswerDto = {
   title: string;
@@ -103,8 +103,7 @@ function withFail<T extends (...args: any[]) => any>(
   fn: T
 ): (...args: Parameters<T>) => ReturnType<T> {
   return (...args: Parameters<T>): ReturnType<T> => {
-    const options = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    const result = Math.floor(Math.random() * options.length);
+    const result = sample([1, 2, 3, 4, 5, 6]);
     const shouldFail = result === 1;
 
     if (shouldFail) {
@@ -119,7 +118,7 @@ function withDelay<T extends (...args: any[]) => any>(
   fn: T
 ): (...args: Parameters<T>) => Promise<ReturnType<T>> {
   return (...args: Parameters<T>): Promise<ReturnType<T>> => {
-    const delay = [100, 300, 600, 1100, 2000][Math.floor(Math.random() * 5)];
+    const delay = sample([100, 300, 600, 1100, 2000]);
 
     return new Promise((resolve) => {
       setTimeout(() => {

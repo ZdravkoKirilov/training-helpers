@@ -45,8 +45,21 @@ export const useQuestions = () => {
   });
 
   const saveQuestions = useMutation(api.saveQuestions, {
-    onSuccess: (response) => {
-      client.setQueryData(cacheKey, response);
+    /* the operation is suitable for an optimistic update */
+    onMutate: async (newQuestions) => {
+      await client.cancelQueries(cacheKey);
+
+      const previousData = client.getQueryData(cacheKey);
+
+      client.setQueryData(cacheKey, newQuestions);
+
+      return { revert: () => client.setQueryData(cacheKey, previousData) };
+    },
+    onError: (_err, _data, context) => {
+      context?.revert();
+    },
+    onSuccess: () => {
+      query.refetch();
     },
   });
 
